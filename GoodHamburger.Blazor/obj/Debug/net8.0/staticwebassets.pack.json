@@ -1,0 +1,61 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Projetos\\GoodHamburger\\GoodHamburger.Blazor\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.webassembly.js",
+      "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js"
+    },
+    {
+      "Id": "D:\\Projetos\\GoodHamburger\\GoodHamburger.Blazor\\obj\\Debug\\net8.0\\scopedcss\\bundle\\GoodHamburger.Blazor.styles.css",
+      "PackagePath": "staticwebassets\\GoodHamburger.Blazor.styles.css"
+    },
+    {
+      "Id": "D:\\Projetos\\GoodHamburger\\GoodHamburger.Blazor\\wwwroot\\css\\app.css",
+      "PackagePath": "staticwebassets\\css\\app.css"
+    },
+    {
+      "Id": "D:\\Projetos\\GoodHamburger\\GoodHamburger.Blazor\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\Projetos\\GoodHamburger\\GoodHamburger.Blazor\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\Projetos\\GoodHamburger\\GoodHamburger.Blazor\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "D:\\Projetos\\GoodHamburger\\GoodHamburger.Blazor\\wwwroot\\icon-192.png",
+      "PackagePath": "staticwebassets\\icon-192.png"
+    },
+    {
+      "Id": "D:\\Projetos\\GoodHamburger\\GoodHamburger.Blazor\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "D:\\Projetos\\GoodHamburger\\GoodHamburger.Blazor\\wwwroot\\sample-data\\weather.json",
+      "PackagePath": "staticwebassets\\sample-data\\weather.json"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.GoodHamburger.Blazor.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.GoodHamburger.Blazor.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.GoodHamburger.Blazor.props",
+      "PackagePath": "build\\GoodHamburger.Blazor.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.GoodHamburger.Blazor.props",
+      "PackagePath": "buildMultiTargeting\\GoodHamburger.Blazor.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.GoodHamburger.Blazor.props",
+      "PackagePath": "buildTransitive\\GoodHamburger.Blazor.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
