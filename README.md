@@ -1,5 +1,7 @@
 # Good Hamburger
 
+[![Visitas](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FBrunoTomm%2Fgood-hamburger&count_bg=%23C0392B&title_bg=%23555555&title=visitas&edge_flat=false)](https://github.com/BrunoTomm/good-hamburger)
+
 Sistema de pedidos para lanchonete com **Clean Architecture**, **CQRS**, **DDD**, **JWT** e frontend **Blazor WebAssembly**.
 
 ---
