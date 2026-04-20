@@ -1,0 +1,36 @@
+﻿<div class="top-row ps-3 navbar navbar-dark" style="background-color: #c8102e;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">­ƒìö Good Hamburger</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="cardapio">
+                Card├ípio
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="pedidos">
+                Meus Pedidos
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="login">
+                Login / Cadastro
+            </NavLink>
+        </div>
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu() => collapseNavMenu = !collapseNavMenu;
+}

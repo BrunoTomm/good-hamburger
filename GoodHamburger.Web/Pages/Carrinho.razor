@@ -1,0 +1,92 @@
+@page "/carrinho"
+@inject CartService Cart
+@inject PedidoService PedidoService
+@inject NavigationManager Nav
+
+<PageTitle>Carrinho -- Good Hamburger</PageTitle>
+
+<div class="cart-page">
+    <h2 class="gh-section-title" style="margin-bottom:20px;">Meu Carrinho</h2>
+
+    @if (Cart.TotalItens == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">&#x1F6D2;</div>
+            <p class="empty-state-title">Carrinho vazio</p>
+            <p class="empty-state-text">Adicione itens do cardapio para comecar.</p>
+            <a href="/cardapio" class="btn-primary-gh">Ver Cardapio</a>
+        </div>
+    }
+    else
+    {
+        @foreach (var item in Cart.Items.Values)
+        {
+            <div class="cart-item-row">
+                <span class="cart-item-emoji">@Emoji(item.Nome)</span>
+                <div class="cart-item-info">
+                    <p class="cart-item-name">@item.Nome</p>
+                    <p class="cart-item-cat">@item.Categoria</p>
+                </div>
+                <span class="cart-item-price">@item.Preco.ToString("C")</span>
+                <button class="btn-remove" @onclick="() => Cart.Remover(item.Nome)" title="Remover">&#x2715;</button>
+            </div>
+        }
+
+        <div class="cart-summary">
+            <div class="cart-summary-row">
+                <span>Subtotal</span>
+                <span>@Cart.Subtotal.ToString("C")</span>
+            </div>
+            @if (Cart.Desconto > 0)
+            {
+                <div class="cart-summary-row discount">
+                    <span>Desconto <span class="discount-badge">-@((int)(Cart.PercentualDesconto * 100))%</span></span>
+                    <span>- @Cart.Desconto.ToString("C")</span>
+                </div>
+            }
+            <div class="cart-summary-row total">
+                <span>Total</span>
+                <span>@Cart.Total.ToString("C")</span>
+            </div>
+        </div>
+
+        @if (_erro is not null)
+        {
+            <div class="gh-alert-danger" style="margin-top:16px;">@_erro</div>
+        }
+
+        <div style="display:flex; gap:12px; margin-top:20px;">
+            <button class="btn-outline-gh" @onclick="Cart.Limpar">Limpar</button>
+            <button class="btn-primary-gh" style="flex:1; justify-content:center;"
+                    @onclick="FinalizarAsync" disabled="@_carregando">
+                @(_carregando ? "Finalizando..." : "Finalizar Pedido")
+            </button>
+        </div>
+    }
+</div>
+
+@code {
+    private bool _carregando;
+    private string? _erro;
+
+    private async Task FinalizarAsync()
+    {
+        _erro = null;
+        _carregando = true;
+        var resultado = await PedidoService.CriarAsync(Cart.ObterNomes());
+        _carregando = false;
+        if (resultado is not null)
+        {
+            Cart.Limpar();
+            Nav.NavigateTo("/pedidos");
+        }
+        else
+        {
+            _erro = "Nao foi possivel criar o pedido. Verifique se esta autenticado.";
+        }
+    }
+
+    private static string Emoji(string nome) =>
+        nome.Contains("Batata") ? "🍟" :
+        nome.Contains("Refrigerante") ? "🥤" : "🍔";
+}

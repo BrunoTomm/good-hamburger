@@ -1,0 +1,9 @@
+@page "/pedidos/novo"
+@inject NavigationManager Nav
+
+<PageTitle>Novo Pedido -- Good Hamburger</PageTitle>
+
+@code {
+    protected override void OnInitialized() =>
+        Nav.NavigateTo("/cardapio", replace: true);
+}

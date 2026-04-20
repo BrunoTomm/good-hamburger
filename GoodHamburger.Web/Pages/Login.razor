@@ -1,0 +1,64 @@
+@page "/login"
+@inject AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Login -- Good Hamburger</PageTitle>
+
+<div class="login-page">
+    <div class="login-card">
+        <div class="login-logo">&#x1F354;</div>
+        <h2 class="login-title">Good Hamburger</h2>
+
+        <div class="gh-tabs">
+            <button class="@("gh-tab" + (_aba == "login" ? " active" : ""))" @onclick="@(() => _aba = "login")">Entrar</button>
+            <button class="@("gh-tab" + (_aba == "cadastro" ? " active" : ""))" @onclick="@(() => _aba = "cadastro")">Cadastrar</button>
+        </div>
+
+        @if (_erro is not null)
+        {
+            <div class="gh-alert-danger">@_erro</div>
+        }
+
+        <div class="gh-field">
+            <label class="gh-label">E-mail</label>
+            <input class="gh-input" type="email" @bind="_email" placeholder="seu@email.com" />
+        </div>
+        <div class="gh-field">
+            <label class="gh-label">Senha</label>
+            <input class="gh-input" type="password" @bind="_senha" placeholder="Minimo 6 caracteres" />
+        </div>
+
+        <button class="btn-primary-gh" style="width:100%; justify-content:center; margin-top:8px;"
+                @onclick="SubmitAsync"
+                disabled="@(_carregando || string.IsNullOrEmpty(_email) || string.IsNullOrEmpty(_senha))">
+            @if (_carregando)
+            {
+                <span class="spinner" style="width:16px;height:16px;border-width:2px;"></span>
+            }
+            @(_aba == "login" ? "Entrar" : "Criar conta")
+        </button>
+    </div>
+</div>
+
+@code {
+    private string _aba = "login";
+    private string _email = "";
+    private string _senha = "";
+    private string? _erro;
+    private bool _carregando;
+
+    private async Task SubmitAsync()
+    {
+        _erro = null;
+        _carregando = true;
+
+        bool ok = _aba == "login"
+            ? await Auth.LoginAsync(_email, _senha)
+            : await Auth.RegisterAsync(_email, _senha);
+
+        _carregando = false;
+
+        if (ok) Nav.NavigateTo("/cardapio");
+        else _erro = _aba == "login" ? "Email ou senha invalidos." : "Nao foi possivel criar a conta.";
+    }
+}

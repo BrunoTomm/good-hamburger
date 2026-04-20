@@ -1,0 +1,78 @@
+@page "/cardapio"
+@inject CardapioService CardapioService
+@inject CartService Cart
+
+<PageTitle>Cardapio -- Good Hamburger</PageTitle>
+
+<div class="gh-container">
+    @if (_cardapio is null)
+    {
+        <div class="gh-spinner"><div class="spinner"></div> Carregando...</div>
+    }
+    else
+    {
+        <div class="combo-info">
+            <p class="combo-info-title">&#x1F389; Combos com desconto</p>
+            <div class="combo-info-item"><span class="badge">20% off</span> Sanduiche + Batata Frita + Refrigerante</div>
+            <div class="combo-info-item"><span class="badge">15% off</span> Sanduiche + Refrigerante</div>
+            <div class="combo-info-item"><span class="badge">10% off</span> Sanduiche + Batata Frita</div>
+        </div>
+
+        @foreach (var grupo in _cardapio.GroupBy(i => i.Categoria))
+        {
+            <h2 class="gh-section-title">@grupo.Key</h2>
+            <div class="gh-items-grid" style="margin-bottom:28px;">
+                @foreach (var item in grupo)
+                {
+                    var sel = Cart.Contem(item.Nome);
+                    <div class="@("gh-item-card" + (sel ? " selected" : ""))">
+                        <div class="@("gh-item-thumb " + EmojiClass(item.Tipo))">@Emoji(item.Tipo)</div>
+                        <div class="gh-item-body">
+                            <p class="gh-item-name">@item.Nome</p>
+                            <p class="gh-item-cat">@item.Categoria</p>
+                            <p class="gh-item-price">@item.Preco.ToString("C")</p>
+                        </div>
+                        <div class="gh-item-footer">
+                            <button class="@("btn-add" + (sel ? " in-cart" : ""))"
+                                    @onclick="() => Cart.Toggle(item.Nome, item.Categoria, item.Preco)">
+                                @(sel ? "\u2713 Adicionado" : "+ Adicionar")
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+@if (Cart.TotalItens > 0)
+{
+    <a href="/carrinho" class="cart-float">
+        <span class="cart-float-count">@Cart.TotalItens</span>
+        Ver carrinho &bull; @Cart.Total.ToString("C")
+    </a>
+}
+
+@code {
+    private List<ItemCardapioDto>? _cardapio;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Cart.CartChanged += StateHasChanged;
+        _cardapio = await CardapioService.ObterAsync();
+    }
+
+    private static string Emoji(string tipo) => tipo switch
+    {
+        "Sanduiche"    => "🍔",
+        "Batata"       => "🍟",
+        _              => "🥤"
+    };
+
+    private static string EmojiClass(string tipo) => tipo switch
+    {
+        "Batata"       => "batata",
+        "Refrigerante" => "refri",
+        _              => ""
+    };
+}

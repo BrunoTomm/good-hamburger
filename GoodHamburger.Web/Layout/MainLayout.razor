@@ -1,0 +1,104 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject AuthService Auth
+@inject CartService Cart
+@inject NavigationManager Nav
+
+<div class="gh-layout">
+    <nav class="gh-navbar">
+        <a class="gh-navbar-brand" href="/">&#x1F354; Good Hamburger</a>
+
+        <div class="gh-navbar-links">
+            <NavLink class="gh-nav-link" href="/cardapio">Cardapio</NavLink>
+            <NavLink class="gh-nav-link" href="/pedidos">Meus Pedidos</NavLink>
+        </div>
+
+        <div class="gh-navbar-right">
+            @if (_email is not null)
+            {
+                <span class="gh-user-chip">&#x1F464; @_email</span>
+                <button class="gh-btn-nav" @onclick="LogoutAsync">Sair</button>
+            }
+            else
+            {
+                <NavLink class="gh-btn-nav" href="/login">Entrar</NavLink>
+            }
+
+            <a href="/carrinho" class="gh-btn-nav cart-btn" title="Carrinho">
+                &#x1F6D2;
+                @if (Cart.TotalItens > 0)
+                {
+                    <span class="cart-badge">@Cart.TotalItens</span>
+                }
+            </a>
+        </div>
+    </nav>
+
+    <div class="gh-page-content">
+        @Body
+    </div>
+
+    <nav class="gh-bottom-nav">
+        <NavLink class="gh-bottom-link" href="/cardapio" Match="NavLinkMatch.Prefix">
+            <span class="gh-bottom-icon">&#x1F354;</span>
+            <span class="gh-bottom-label">Cardapio</span>
+        </NavLink>
+        <NavLink class="gh-bottom-link" href="/pedidos" Match="NavLinkMatch.Prefix">
+            <span class="gh-bottom-icon">&#x1F4CB;</span>
+            <span class="gh-bottom-label">Pedidos</span>
+        </NavLink>
+        <a href="/carrinho" class="gh-bottom-link">
+            <span class="gh-bottom-icon">
+                &#x1F6D2;
+                @if (Cart.TotalItens > 0)
+                {
+                    <span class="cart-badge-bottom">@Cart.TotalItens</span>
+                }
+            </span>
+            <span class="gh-bottom-label">Carrinho</span>
+        </a>
+        @if (_email is not null)
+        {
+            <button class="gh-bottom-link" @onclick="LogoutAsync">
+                <span class="gh-bottom-icon">&#x1F464;</span>
+                <span class="gh-bottom-label">Sair</span>
+            </button>
+        }
+        else
+        {
+            <NavLink class="gh-bottom-link" href="/login">
+                <span class="gh-bottom-icon">&#x1F511;</span>
+                <span class="gh-bottom-label">Entrar</span>
+            </NavLink>
+        }
+    </nav>
+</div>
+
+@code {
+    private string? _email;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _email = await Auth.GetEmailAsync();
+        Cart.CartChanged += StateHasChanged;
+        Auth.AuthChanged += OnAuthChanged;
+    }
+
+    private async void OnAuthChanged()
+    {
+        _email = await Auth.GetEmailAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task LogoutAsync()
+    {
+        await Auth.LogoutAsync();
+        Nav.NavigateTo("/login");
+    }
+
+    public void Dispose()
+    {
+        Cart.CartChanged -= StateHasChanged;
+        Auth.AuthChanged -= OnAuthChanged;
+    }
+}

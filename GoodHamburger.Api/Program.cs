@@ -41,6 +41,14 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.WithOrigins("http://localhost:5072")
+              .AllowAnyMethod()
+              .AllowAnyHeader());
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -81,7 +89,7 @@ if (app.Environment.IsDevelopment())
         .WithOpenApiRoutePattern("/swagger/{documentName}/swagger.json"));
 }
 
-app.UseHttpsRedirection();
+app.UseCors();
 app.UseOutputCache();
 app.UseAuthentication();
 app.UseAuthorization();

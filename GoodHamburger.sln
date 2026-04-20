@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodHamburger.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodHamburger.Api", "GoodHamburger.Api\GoodHamburger.Api.csproj", "{9E42FBA2-0CEC-4879-A0C3-1A91640A5FCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodHamburger.Blazor", "GoodHamburger.Blazor\GoodHamburger.Blazor.csproj", "{5506B756-DCBA-4A74-BD26-A0735AFA01C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodHamburger.Web", "GoodHamburger.Blazor\GoodHamburger.Blazor.csproj", "{5506B756-DCBA-4A74-BD26-A0735AFA01C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodHamburger.Tests", "GoodHamburger.Tests\GoodHamburger.Tests.csproj", "{F8339C5B-00BD-4B8A-90DE-D0B4609C162C}"
 EndProject
