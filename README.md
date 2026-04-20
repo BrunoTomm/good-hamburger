@@ -1,7 +1,5 @@
 # Good Hamburger
 
-[![Visitas](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FBrunoTomm%2Fgood-hamburger&count_bg=%23C0392B&title_bg=%23555555&title=visitas&edge_flat=false)](https://github.com/BrunoTomm/good-hamburger)
-
 Sistema de pedidos para lanchonete com **Clean Architecture**, **CQRS**, **DDD**, **JWT** e frontend **Blazor WebAssembly**.
 
 ---
@@ -747,3 +745,9 @@ http://localhost:5050/scalar/v1
 ```
 
 O Scalar permite explorar e testar todos os endpoints diretamente no browser com suporte a autenticacao Bearer.
+
+---
+
+<p align="center">
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=BrunoTomm.good-hamburger&left_color=555555&right_color=c0392b&left_text=visitas" alt="visitas" />
+</p>
