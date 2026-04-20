@@ -37,43 +37,51 @@ O **Good Hamburger** permite que usuarios se cadastrem, autentiquem e realizem p
 
 ## Fluxo Completo do Sistema
 
-```
-Usuario                   Frontend (Blazor WASM)           API (.NET 8)             Banco (SQL Server)
-   |                              |                             |                           |
-   |-- Acessa /login ------------>|                             |                           |
-   |<- Formulario (Entrar/Cadastrar)                           |                           |
-   |                              |                             |                           |
-   |-- Cadastro/Login ----------->|                             |                           |
-   |                              |-- POST /auth/register ----->|                           |
-   |                              |   ou POST /auth/login       |-- BCrypt hash/verify ---->|
-   |                              |                             |<- Usuario do banco --------|
-   |                              |<- JWT Token + expiracao ----|                           |
-   |                              |-- Salva em localStorage     |                           |
-   |<- Redireciona para /cardapio |                             |                           |
-   |                              |                             |                           |
-   |-- Acessa /cardapio --------->|                             |                           |
-   |                              |-- GET /cardapio ----------->|-- OutputCache (1h) ------->|
-   |<- Grid de itens + combos ----|<- Lista de itens -----------|                           |
-   |                              |                             |                           |
-   |-- Seleciona itens ---------->|                             |                           |
-   |                              |  CartService (singleton)    |                           |
-   |<- Preview desconto em tempo real (sem chamada de API)      |                           |
-   |<- Botao flutuante "Ver carrinho R$ X"                      |                           |
-   |                              |                             |                           |
-   |-- Clica "Finalizar Pedido" ->|                             |                           |
-   |                              |-- POST /pedidos ----------->|                           |
-   |                              |   Authorization: Bearer JWT |-- Valida JWT ------------->|
-   |                              |   { itens: ["X Burger"...]} |-- Busca itens no cardapio  |
-   |                              |                             |-- Calcula desconto no dominio
-   |                              |                             |-- Persiste pedido -------->|
-   |                              |                             |-- Publica domain event     |
-   |                              |<- 201 Created + PedidoDto --|                           |
-   |<- Redireciona para /pedidos  |                             |                           |
-   |                              |                             |                           |
-   |-- Acessa /pedidos ---------->|                             |                           |
-   |                              |-- GET /pedidos?pagina=1 --->|                           |
-   |                              |<- PagedResult<PedidoDto> ---|<- Query com soft delete ---|
-   |<- Lista de pedidos com descontos aplicados                 |                           |
+```mermaid
+sequenceDiagram
+    actor U as Usuario
+    participant F as Frontend (Blazor WASM)
+    participant A as API (.NET 8)
+    participant B as Banco (SQL Server)
+
+    U->>F: Acessa /login
+    F-->>U: Formulario Login / Cadastro
+
+    U->>F: Submete credenciais
+    F->>A: POST /auth/register ou /auth/login
+    A->>B: BCrypt hash / verify
+    B-->>A: Usuario encontrado
+    A-->>F: JWT Token + expiracao
+    F->>F: Salva token em localStorage
+    F-->>U: Redireciona para /cardapio
+
+    U->>F: Acessa /cardapio
+    F->>A: GET /cardapio
+    A->>B: OutputCache (1h)
+    B-->>A: Lista de itens
+    A-->>F: Lista de itens
+    F-->>U: Grid com combos e precos
+
+    U->>F: Seleciona itens
+    Note over F: CartService (singleton)<br/>Calcula desconto em tempo real<br/>sem nenhuma chamada a API
+    F-->>U: Preview desconto + botao flutuante Ver carrinho
+
+    U->>F: Clica Finalizar Pedido
+    F->>A: POST /pedidos (Authorization: Bearer JWT)
+    A->>A: Valida JWT
+    A->>A: Resolve itens do cardapio
+    A->>A: Calcula desconto no dominio (Pedido.PercentualDesconto)
+    A->>B: Persiste pedido com desconto
+    A->>A: Publica PedidoCriadoEvent
+    A-->>F: 201 Created + PedidoDto (total com desconto)
+    F-->>U: Redireciona para /pedidos
+
+    U->>F: Acessa /pedidos
+    F->>A: GET /pedidos?pagina=1
+    A->>B: Query com HasQueryFilter (soft delete)
+    B-->>A: PagedResult
+    A-->>F: PagedResult com descontos aplicados
+    F-->>U: Lista de pedidos
 ```
 
 ### Onde o desconto e calculado
